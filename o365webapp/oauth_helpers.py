@@ -23,7 +23,8 @@ def sign_in_url():
     auth_params = {
         'response_type': 'code',
         'redirect_uri': O365_REDIRECT_URI,
-        'client_id': O365_APP_ID
+        'client_id': O365_APP_ID,
+        'scope':'https://graph.microsoft.com/calendars.read'
     }
     url_parts[4] = urllib.parse.urlencode(auth_params)
     return urlparse.urlunparse(url_parts)
@@ -35,11 +36,14 @@ def get_oauth_token(code):
         'redirect_uri': O365_REDIRECT_URI,
         'client_id': O365_APP_ID,
         'client_secret': O365_APP_KEY,
-        'code': code,
-        'resource': 'https://graph.microsoft.com/'
+        'code': code
     }
 
     r = requests.post(O365_TOKEN_URL, data=token_params)
+
+    print('------')
+    print(r.json)
+    print('------')
 
     return r.json()
 

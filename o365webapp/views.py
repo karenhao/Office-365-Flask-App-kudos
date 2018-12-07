@@ -25,7 +25,7 @@ def connect_o365_token():
         return flask.Response(status=400)
 
     token = get_oauth_token(code)
-    jwt = get_jwt_from_id_token(token['id_token'])
+    jwt = get_jwt_from_id_token(token['access_token'])
 
     oauth_token = O365OAuthToken.query.filter(O365OAuthToken.user_email == jwt['upn']).first()
     if not oauth_token:
