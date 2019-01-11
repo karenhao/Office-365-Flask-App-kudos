@@ -24,7 +24,7 @@ def sign_in_url():
         'response_type': 'code',
         'redirect_uri': O365_REDIRECT_URI,
         'client_id': O365_APP_ID,
-        'scope':'https://graph.microsoft.com/calendars.read'
+        'scope':'https://graph.microsoft.com/files.readwrite'
     }
     url_parts[4] = urllib.parse.urlencode(auth_params)
     return urlparse.urlunparse(url_parts)
