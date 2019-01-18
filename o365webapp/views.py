@@ -30,9 +30,17 @@ def connect_o365_token():
     token = get_oauth_token(code)
     jwt = get_jwt_from_id_token(token['access_token'])
 
-    url = 'https://graph.microsoft.com/v1.0/me/drive/root:/kudos.xlsx:/workbook/worksheets/Sheet1/rows/add'
+    # get request
+    # # https://graph.microsoft.com/v1.0/drives/DRIVE_ID/items/ITEM_ID/workbook/worksheets
+    # url = 'https://graph.microsoft.com/v1.0/me/drive/root:/kudos.xlsx:/workbook/tables/Table1/rows'
+    # headers = {"Authorization":"Bearer " + token['access_token']}
+
+    # print(requests.get(url,headers=headers).text)
+
+
+    url = 'https://graph.microsoft.com/v1.0/me/drive/root:/kudos.xlsx:/workbook/tables/Table1/rows/add'
     headers = {"Authorization":"Bearer " + token['access_token']}
-    data = {"index": 1, "values": [['J Stray','C','11-Jan']]}
+    data = {"index": None, "values": [['J Stray','C','11-Jan','','']]}
     # data = json.dumps(data)
 
     print(requests.post(url,json=data,headers=headers).json())
