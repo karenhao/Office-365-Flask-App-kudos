@@ -28,22 +28,35 @@ def connect_o365_token():
         return flask.Response(status=400)
 
     token = get_oauth_token(code)
-    jwt = get_jwt_from_id_token(token['access_token'])
 
-    # get request
-    # # https://graph.microsoft.com/v1.0/drives/DRIVE_ID/items/ITEM_ID/workbook/worksheets
-    # url = 'https://graph.microsoft.com/v1.0/me/drive/root:/kudos.xlsx:/workbook/tables/Table1/rows'
-    # headers = {"Authorization":"Bearer " + token['access_token']}
+    # saves access token to db
+    app.logger.info('CREATING new O365OAuthToken')
+    oauth_token = O365OAuthToken(
+        access_token=token['access_token']
+    )
+    print(oauth_token)
 
-    # print(requests.get(url,headers=headers).text)
+    print(app.config['SQLALCHEMY_DATABASE_URI'])
 
+    db.create_all()
+    db.session.add(oauth_token)
+    db.session.commit()
+
+    return 'got the token'
+
+
+@app.route('/add')
+def add_row():
+    token = O365OAuthToken.query.all()[0]
+    print(token)
 
     url = 'https://graph.microsoft.com/v1.0/me/drive/root:/kudos.xlsx:/workbook/tables/Table1/rows/add'
-    headers = {"Authorization":"Bearer " + token['access_token']}
+    headers = {"Authorization":"Bearer " + token.access_token}
     data = {"index": None, "values": [['J Stray','C','11-Jan','','']]}
-    # data = json.dumps(data)
 
     print(requests.post(url,json=data,headers=headers).json())
+
+    return 'added a row'
 
     # oauth_token = O365OAuthToken.query.filter(O365OAuthToken.user_email == jwt['upn']).first()
     # if not oauth_token:
@@ -70,6 +83,4 @@ def connect_o365_token():
     # db.session.commit()
 
     # flask.session['user_email'] = oauth_token.user_email
-    # flask.session['access_token'] = oauth_token.access_token
-
-    return flask.redirect('/')
+    # flask.session['access_token'] = oauth_token.access_token 

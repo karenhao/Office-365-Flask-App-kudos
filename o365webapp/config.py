@@ -7,6 +7,8 @@ DEBUG = True
 SECRET_KEY = '<SECRET>'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.join(BASEDIR, 'database'), 'office365.db')
+print(SQLALCHEMY_DATABASE_URI)
+
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 O365_APP_ID = 'bd7d7f09-6bc2-40f6-91e3-969604f989ce'

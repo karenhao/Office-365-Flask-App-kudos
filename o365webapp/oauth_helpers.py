@@ -41,10 +41,6 @@ def get_oauth_token(code):
 
     r = requests.post(O365_TOKEN_URL, data=token_params)
 
-    print('------')
-    print(r.json)
-    print('------')
-
     return r.json()
 
 
